@@ -1,0 +1,102 @@
+ <aside 
+        class="fixed top-0 left-0 z-50 h-screen bg-sidebar border-r border-gray-200 flex flex-col transition-width duration-300 shadow-sm"
+        :class="{
+            'w-64': sidebarOpen && !mobileSidebarOpen,
+            'w-20': !sidebarOpen && !mobileSidebarOpen,
+            '-translate-x-full lg:translate-x-0': !mobileSidebarOpen,
+            'translate-x-0 w-64': mobileSidebarOpen
+        }"
+    >
+        <!-- // Header Logo Sidebar -->
+        <div class="h-16 flex items-center justify-between px-5 border-b border-gray-100 shrink-0">
+            <a href="#" class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-brand-500/30 shrink-0">
+                    <i class="fa-solid fa-cube"></i>
+                </div>
+                <span 
+                    x-show="(sidebarOpen && !mobileSidebarOpen) || mobileSidebarOpen" 
+                    x-transition
+                    class="font-bold text-xl text-gray-800 tracking-wide truncate"
+                >
+                    Rekap Apel
+                </span>
+            </a>
+            <!-- Button Close untuk Mobile -->
+            <button @click="mobileSidebarOpen = false" class="lg:hidden text-gray-500 hover:text-gray-700">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- // Menu Navigation Scrollable -->
+        <div class="flex-1 overflow-y-auto px-3 py-4 space-y-6 overflow-x-hidden">
+            
+            <!-- ========================================== -->
+            <!-- MENU GROUP 1: MENU UTAMA                  -->
+            <!-- ========================================== -->
+            <div>
+                <!-- Subtitle Menu Group -->
+                <div 
+                    x-show="sidebarOpen || mobileSidebarOpen" 
+                    class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2"
+                >
+                    Menu
+                </div>
+
+                <nav class="space-y-1">
+                    <!-- // Single Link: Dashboard -->
+                    <a href="#" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-brand-500 bg-brand-50 transition-colors">
+                        <i class="fa-solid fa-house w-6 text-center text-base shrink-0"></i>
+                        <span x-show="sidebarOpen || mobileSidebarOpen" class="ml-3 truncate">Dashboard</span>
+                    </a>
+
+
+                </nav>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- MENU GROUP 2: ELEMENTS                    -->
+            <!-- ========================================== -->
+            <div>
+                <!-- Subtitle Menu Group -->
+                <div 
+                    x-show="sidebarOpen || mobileSidebarOpen" 
+                    class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2"
+                >
+                    Master Data
+                </div>
+
+                <nav class="space-y-1">
+                    <!-- // Menu Dropdown: Components -->
+                    <div x-data="{ open: false }">
+                        <button 
+                            @click="open = !open" 
+                            class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                        >
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-box-archive w-6 text-center text-base shrink-0"></i>
+                                <span x-show="sidebarOpen || mobileSidebarOpen" class="ml-3 truncate">Pegawai</span>
+                            </div>
+                            <i 
+                                x-show="sidebarOpen || mobileSidebarOpen" 
+                                class="fa-solid fa-chevron-right text-xs transition-transform duration-200"
+                                :class="open ? 'rotate-90' : ''"
+                            ></i>
+                        </button>
+                        <!-- Isi Sub-Menu Components -->
+                        <div 
+                            x-show="open && (sidebarOpen || mobileSidebarOpen)" 
+                            x-collapse 
+                            class="pl-9 pr-3 py-1 space-y-1 text-sm text-gray-500"
+                        >
+                            
+                            <a href="#" class="block py-1.5 px-2 rounded hover:text-brand-500 hover:bg-gray-50 truncate">Data pegawai</a>
+                        </div>
+                    </div>
+
+                   
+
+                </nav>
+            </div>
+
+        </div>
+    </aside>
