@@ -13,7 +13,11 @@
     
     <!-- FontAwesome CDN untuk Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
+    <!-- SweetAlert2 -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <!-- Custom Tailwind Configuration untuk Menyesuaikan Warna Theme -->
     <script>
         tailwind.config = {
@@ -96,6 +100,7 @@
 
         <!-- // MAIN CONTENT CONTAINER (Halaman Isi Utama) -->
         <main class="flex-1 p-4 sm:p-6 lg:p-8">
+            @include('sweetalert2::index')
             
             @yield('content')
             
@@ -103,12 +108,7 @@
         </main>
     </div>
 
-    <!-- Floating RTL Floating Button Sesuai Gambar -->
-    <div class="fixed bottom-6 right-6 z-40">
-        <button class="w-12 h-12 bg-brand-500 text-white font-bold text-xs rounded-full shadow-lg hover:bg-brand-600 flex items-center justify-center transition-transform hover:scale-105">
-            RTL
-        </button>
-    </div>
+   
 
 </body>
 </html>

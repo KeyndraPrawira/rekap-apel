@@ -44,7 +44,7 @@
 
                 <nav class="space-y-1">
                     <!-- // Single Link: Dashboard -->
-                    <a href="#" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-brand-500 bg-brand-50 transition-colors">
+                    <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-brand-500 bg-brand-50 transition-colors">
                         <i class="fa-solid fa-house w-6 text-center text-base shrink-0"></i>
                         <span x-show="sidebarOpen || mobileSidebarOpen" class="ml-3 truncate">Dashboard</span>
                     </a>
@@ -89,7 +89,20 @@
                             class="pl-9 pr-3 py-1 space-y-1 text-sm text-gray-500"
                         >
                             
-                            <a href="#" class="block py-1.5 px-2 rounded hover:text-brand-500 hover:bg-gray-50 truncate">Data pegawai</a>
+                            <a href="{{ route('pegawai.index') }}" 
+                            class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('pegawai.*') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                                <div class="flex items-center space-x-3">
+                                    <svg class="w-5 h-5 {{ request()->routeIs('pegawai.*') ? 'text-indigo-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    </svg>
+                                    <span>Pegawai</span>
+                                </div>
+                                
+                                <!-- Indikator panah / panah kanan -->
+                                <svg class="w-4 h-4 {{ request()->routeIs('pegawai.*') ? 'text-indigo-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
                         </div>
                     </div>
 

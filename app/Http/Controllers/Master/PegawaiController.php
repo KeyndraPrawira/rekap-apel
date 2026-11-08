@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
+use SweetAlert2\Laravel\Swal;
 
 class PegawaiController extends Controller
 {
@@ -12,12 +14,12 @@ class PegawaiController extends Controller
      */
     public function index()
     {
-        
-        return view('master.pegawai.index');
+        $pegawai = Pegawai::latest()->paginate(10);
+        return view('master.pegawai.index', compact('pegawai'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan form tambah master.pegawai.
      */
     public function create()
     {
@@ -25,42 +27,75 @@ class PegawaiController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan data pegawai baru.
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama'    => 'required|string|max:255',
+            'jabatan' => 'required|string|max:255',
+            'no_hp'   => 'required|string|max:20',
+            'email'   => 'required|email|unique:pegawai,email',
+        ]);
+
+        Pegawai::create($validated);
+
+        Swal::success([
+            'title' => 'Berhasil!',
+            'text' => 'Data pegawai berhasil ditambahkan.',
+        ]);
+
+        return redirect()->route('pegawai.index')
+            ->with('success', 'Data pegawai berhasil ditambahkan.');
     }
 
     /**
-     * Display the specified resource.
+     * Menampilkan detail master.pegawai.
      */
-    public function show(string $id)
+    public function show(Pegawai $pegawai)
     {
-        //
+        return view('master.pegawai.show', compact('pegawai'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Menampilkan form edit master.pegawai.
      */
-    public function edit(string $id)
+    public function edit(Pegawai $pegawai)
     {
-        //
+        return view('master.pegawai.edit', compact('pegawai'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Memperbarui data master.pegawai.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Pegawai $pegawai)
     {
-        //
+        $validated = $request->validate([
+            'nama'    => 'required|string|max:255',
+            'jabatan' => 'required|string|max:255',
+            'no_hp'   => 'required|string|max:20',
+            'email'   => 'required|email|unique:pegawai,email,' . $pegawai->id,
+        ]);
+
+        $pegawai->update($validated);
+
+        return redirect()->route('pegawai.index')
+            ->with('success', 'Data pegawai berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus data master.pegawai.
      */
-    public function destroy(string $id)
+    public function destroy(Pegawai $pegawai)
     {
-        //
+        
+        $pegawai->delete();
+        Swal::success([
+            'title' => 'Berhasil!',
+            'text' => 'Data pegawai berhasil dihapus.',
+        ]);
+        
+        return redirect()->route('pegawai.index')
+            ->with('success', 'Data pegawai berhasil dihapus.');
     }
 }
