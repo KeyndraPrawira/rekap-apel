@@ -9,15 +9,11 @@ class Rekap extends Model
     protected $table = 'rekap';
 
     protected $fillable = [
-        'jenis_apel_id',
-        'pegawai_id',
+        'jenis_apel',
         'tanggal',
     ];
 
-    public function jenisApel()
-    {
-        return $this->belongsTo(JenisApel::class);
-    }
+    
 
     public function pegawai()
     {

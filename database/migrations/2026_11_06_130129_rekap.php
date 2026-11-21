@@ -13,18 +13,13 @@ return new class extends Migration
     
     public function up(): void
     {
-        Schema::create('jenis_apel', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_jenis')->unique();
-            $table->timestamps();
-        });
+       
 
         Schema::create('rekap', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('jenis_apel_id');
-            $table->unsignedBigInteger('pegawai_id');
+
+            $table->enum('jenis_apel', ['Apel Pagi', 'Apel Siang']);
             $table->date('tanggal');
-            $table->foreign('jenis_apel_id')->references('id')->on('jenis_apel')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -34,7 +29,7 @@ return new class extends Migration
             $table->unsignedBigInteger('pegawai_id');
             $table->foreign('rekap_id')->references('id')->on('rekap')->onDelete('cascade');
             $table->foreign('pegawai_id')->references('id')->on('pegawai')->onDelete('cascade');
-            $table->enum('status', ['Hadir', 'Izin', 'Sakit', 'Alpa']);
+            $table->enum('status', ['Hadir', 'Tidak Hadir', 'Izin', 'Sakit', 'Dinas Luar', 'Cuti', 'Terlambat']);
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });
@@ -45,7 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jenis_apel');
         Schema::dropIfExists('rekap');
         Schema::dropIfExists('detail_rekap');
         
