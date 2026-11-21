@@ -13,6 +13,16 @@ class Rekap extends Model
         'tanggal',
     ];
 
+    const  STATUS = [
+            'Hadir',
+            'Tidak Hadir',
+            'Izin',
+            'Sakit',
+            'Dinas Luar',
+            'Cuti',
+            'Terlambat'
+        ];
+
     
 
     public function pegawai()

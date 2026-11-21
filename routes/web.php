@@ -18,6 +18,10 @@ Route::get('/', function () {
 Route::get('/dashboard', [Dashboard::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::prefix('absen/export')->name('absen.export.')->group(function () {
+    Route::get('pdf', [AbsenController::class, 'exportPdf'])->name('pdf');
+    Route::get('excel', [AbsenController::class, 'exportExcel'])->name('excel');
+    });
     Route::resource('pegawai', PegawaiController::class);
     Route::resource('absen', AbsenController::class);
     Route::get('/absen/{absen}/detail', [AbsenController::class, 'detail'])->name('absen.detail');

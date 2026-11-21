@@ -52,7 +52,7 @@
 
 <!-- Form Tabel Daftar Hadir -->
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <form action="{{ route('absen.detail.store', $absen->id) }}" method="POST">
+    <form id="form-detail-apel" action="{{ route('absen.detail.store', $absen->id) }}" method="POST">
         @csrf
 
         <!-- Header & Quick Action -->
@@ -131,7 +131,7 @@
                                         required>
                                     <option value="" disabled {{ $currentStatus == '' ? 'selected' : '' }}>-- Pilih Status --</option>
                                     {{-- Sesuaikan daftar enum ini dengan kolom enum di tabel detail_absen kamu --}}
-                                    @foreach($statusOptions ?? ['Hadir', 'Tidak Hadir', 'Izin', 'Sakit', 'Alpa', 'Dinas Luar'] as $status)
+                                   @foreach($statusOptions ?? ['Hadir', 'Tidak Hadir', 'Izin', 'Sakit', 'Dinas Luar', 'Cuti', 'Terlambat'] as $status)
                                         <option value="{{ $status }}" {{ $currentStatus ==$status ? 'selected' : '' }}>
                                             {{ $status }}
                                         </option>
@@ -146,7 +146,7 @@
                                        value="{{ $currentKeterangan }}"
                                        placeholder="Masukkan keterangan (contoh: Tepat waktu / Surat dokter)"
                                        class="w-full px-3 py-2 bg-gray-50 border border-gray-200 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all"
-                                       required>
+                                       >
                             </td>
                         </tr>
                     @empty
@@ -160,22 +160,108 @@
             </table>
         </div>
 
-        <!-- Footer Simpan -->
-        <div class="p-6 bg-gray-50/50 border-t border-gray-100 flex items-center justify-end gap-3">
-            <a href="{{ route('absen.index') }}" 
-               class="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-xl transition-colors">
-                Batal
-            </a>
-            <button type="submit" 
-                    class="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                Simpan Rekap Kehadiran
-            </button>
-        </div>
-    </form>
+
+        <form id="form-batal-apel"
+            action="{{ route('absen.destroy', $absen->id) }}"
+            method="POST"
+            class="hidden">
+            @csrf
+            @method('DELETE')
+        </form>
+
+       <!-- Footer Simpan -->
+<div class="p-6 bg-gray-50/50 border-t border-gray-100 flex items-center justify-end gap-3">
+    <button type="button"
+            id="btn-batal-apel"
+            class="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-xl transition-colors">
+        Batal
+    </button>
+
+    <button type="submit"
+            class="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        Simpan Rekap Kehadiran
+    </button>
 </div>
+</form>
+</div>
+
+<!-- Form hapus sesi apel, wajib di luar form utama -->
+<form id="form-batal-apel"
+      action="{{ route('absen.destroy', $absen->id) }}"
+      method="POST"
+      class="hidden">
+    @csrf
+    @method('DELETE')
+</form>
+
+<script>
+    /**
+     * Mengelola siklus hidup sesi apel yang sedang diisi.
+     * - Tombol Batal: konfirmasi SweetAlert2, lalu hapus sesi.
+     * - Meninggalkan halaman tanpa Simpan: hapus sesi secara otomatis.
+     * - Simpan: sesi dipertahankan.
+     */
+    (function () {
+        const formDetail = document.getElementById('form-detail-apel');
+        const formBatal = document.getElementById('form-batal-apel');
+        const urlHapus = "{{ route('absen.destroy', $absen->id) }}";
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+        // Penanda agar sesi tidak dihapus dua kali (misalnya setelah Batal, halaman juga ditinggalkan)
+        let sudahSelesai = false;
+
+        // Saat Simpan ditekan, sesi harus dipertahankan
+        formDetail.addEventListener('submit', function () {
+            sudahSelesai = true;
+        });
+
+        // Tombol Batal: konfirmasi dulu, lalu kirim form hapus
+        document.addEventListener('click', function (event) {
+            const btnBatal = event.target.closest('#btn-batal-apel');
+            if (!btnBatal) {
+                return;
+            }
+
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Batalkan sesi apel?',
+                text: 'Sesi ini dan seluruh daftar hadir yang sudah diisi akan dihapus permanen.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, batalkan',
+                cancelButtonText: 'Tidak',
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                reverseButtons: true
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    sudahSelesai = true;
+                    formBatal.submit();
+                }
+            });
+        });
+
+        // Meninggalkan halaman tanpa Simpan: hapus sesi di background.
+        // sendBeacon hanya bisa POST, jadi method DELETE dikirim lewat field _method
+        // (Laravel membacanya otomatis).
+        window.addEventListener('pagehide', function () {
+            if (sudahSelesai) {
+                return;
+            }
+
+            const data = new FormData();
+            data.append('_token', csrfToken);
+            data.append('_method', 'DELETE');
+
+            navigator.sendBeacon(urlHapus, data);
+        });
+    })();
+</script>
 
 
 @endsection
+

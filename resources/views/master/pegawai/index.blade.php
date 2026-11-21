@@ -10,13 +10,13 @@
         <h1 class="text-xl font-bold text-gray-800 tracking-tight mb-3">Master Data Pegawai</h1>
     </div>
     <div>
-        <a href="{{ route('pegawai.create') }}" 
-           class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all duration-150 mb-3 ease-in-out focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        <button type="button" onclick="openModalPegawai('create')"
+        class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all duration-150 mb-3 ease-in-out focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
             Tambah Pegawai
-        </a>
+        </button>
     </div>
 </div>
 
@@ -47,9 +47,7 @@
                     </td>
                     <td class="py-4 px-6 font-semibold text-gray-900 whitespace-nowrap">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 font-semibold flex items-center justify-center text-xs">
-                                {{ strtoupper(substr($item->nama, 0, 2)) }}
-                            </div>
+                            
                             <span>{{ $item->nama }}</span>
                         </div>
                     </td>
@@ -67,13 +65,19 @@
                     <td class="py-4 px-6 text-center whitespace-nowrap">
                         <div class="flex items-center justify-center gap-2">
                             <!-- Edit Button -->
-                            <a href="{{ route('pegawai.edit', $item->id) }}" 
-                               title="Edit Data"
-                               class="p-1.5 text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors">
+                           <button type="button"
+                                    onclick="openModalPegawai('edit', this.dataset)"
+                                    data-id="{{ $item->id }}"
+                                    data-nama="{{ $item->nama }}"
+                                    data-jabatan="{{ $item->jabatan }}"
+                                    data-no_hp="{{ $item->no_hp }}"
+                                    data-email="{{ $item->email }}"
+                                    title="Edit Data"
+                                    class="p-1.5 text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
-                            </a>
+                            </button>
 
                             <!-- Delete Button (Triggers SweetAlert2) -->
                             <button type="button" 
@@ -108,6 +112,8 @@
         {{ $pegawai->links() }}
     </div>
 @endif
+
+@include('master.pegawai.form_modal')
 
 <!-- Form Tersembunyi untuk Proses Delete -->
 <form id="global-delete-form" method="POST" class="hidden">

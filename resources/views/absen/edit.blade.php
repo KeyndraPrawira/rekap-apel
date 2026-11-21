@@ -20,6 +20,15 @@
     </div>
 
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+        @if ($errors->any())
+    <div class="rounded-xl bg-rose-50 border border-rose-200 p-4 text-sm text-rose-700">
+        <ul class="list-disc pl-5 space-y-1">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
         <form id="form-edit-absen" action="{{ route('absen.update', $rekap->id) }}" method="POST" class="space-y-8">
             @csrf
             @method('PUT')

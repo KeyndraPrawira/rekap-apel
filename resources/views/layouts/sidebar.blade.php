@@ -18,7 +18,7 @@
                 x-transition
                 class="font-bold text-xl text-gray-800 tracking-wide truncate"
             >
-                Rekap Apel
+                SIPATEN
             </span>
         </a>
         <!-- Tombol tutup sidebar untuk mobile -->

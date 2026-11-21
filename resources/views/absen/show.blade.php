@@ -37,20 +37,19 @@
             <div>
                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Jenis Apel</p>
                 <span class="inline-flex px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-md border border-indigo-100">
-                    {{ $rekap->jenisApel->nama_jenis ?? '-' }}
+                    {{ $rekap->jenis_apel ?? '-' }}
                 </span>
             </div>
             <div>
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">PJ / Petugas</p>
-                <p class="text-sm font-semibold text-gray-900">{{ $rekap->pegawai->nama ?? '-' }}</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Jumlah Pegawai yang Hadir</p>
+                <p class="text-sm font-semibold text-gray-900">{{ $rekap->detailRekap->where('status', 'Hadir')->count() }} orang</p>
+            
+           
             </div>
-        </div>
     </div>
 
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <h2 class="text-sm font-semibold text-gray-800 uppercase tracking-wider">Detail Kehadiran</h2>
-        </div>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mt-6">
+       
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-sm">
                 <thead>
@@ -64,7 +63,7 @@
                 <tbody class="divide-y divide-gray-100 text-gray-600">
                     @forelse($rekap->detailRekap as $index => $detail)
                         <tr class="hover:bg-indigo-50/30 transition-colors">
-                            <td class="py-4 px-6 text-center font-medium text-gray-400">{{ $index + 1 }}</td>
+                            <td class="py-4 px-6 text-center font-medium text-black-400">{{ $index + 1 }}</td>
                             <td class="py-4 px-6 font-medium text-gray-900">{{ $detail->pegawai->nama ?? '-' }}</td>
                             <td class="py-4 px-6">
                                 @php

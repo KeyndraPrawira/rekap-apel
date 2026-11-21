@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Rekap apel - Admin Lapas</title>
     
     <!-- Tailwind CSS CDN -->
@@ -55,6 +56,8 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #cbd5e1;
         }
+
+         [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="bg-bodybg font-sans text-gray-700 antialiased flex min-h-screen">
@@ -94,6 +97,7 @@
             'lg:ml-20': !sidebarOpen
         }"
     >
+    
         
         <!-- // NAVBAR TOP BAR -->
         @include('layouts.navigation')
@@ -103,6 +107,8 @@
             @include('sweetalert2::index')
             
             @yield('content')
+
+            @stack('scripts')
             
 
         </main>
